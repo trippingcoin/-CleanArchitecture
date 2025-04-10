@@ -14,7 +14,7 @@ func SetupRouter(db *sql.DB) *gin.Engine {
 
 	r.GET("/products", productCtrl.List)
 	r.POST("/products", productCtrl.Create)
-	// Add others: GET /:id, PATCH /:id, DELETE /:id
+	// TODO: GET /:id, PATCH /:id, DELETE /:id
 
 	return r
 }

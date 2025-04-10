@@ -14,7 +14,7 @@ func Start() {
 	r.Any("/inventory/*path", reverseProxy("http://localhost:8001"))
 	r.Any("/orders/*path", reverseProxy("http://localhost:8002"))
 
-	r.Run(":8000") // API Gateway listens on 8000
+	r.Run(":8000")
 }
 
 func reverseProxy(target string) gin.HandlerFunc {
