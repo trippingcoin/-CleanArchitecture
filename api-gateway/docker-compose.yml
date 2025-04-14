@@ -1,0 +1,7 @@
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      - inventory-service
+      - order-service

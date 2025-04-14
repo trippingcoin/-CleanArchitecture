@@ -13,5 +13,7 @@
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: inventorydb
+    volumes:
+      - ./inventory-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "5433:5432"

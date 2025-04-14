@@ -7,8 +7,8 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o main ./cmd/main.go
+RUN go build -o api-gateway ./cmd/main.go
 
-EXPOSE 50051
+EXPOSE 8080
 
-CMD ["/app/main"]
+CMD ["/app/api-gateway"]

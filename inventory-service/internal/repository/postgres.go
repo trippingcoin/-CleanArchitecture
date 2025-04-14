@@ -2,7 +2,6 @@ package repository
 
 import (
 	"database/sql"
-	"errors"
 	"inventory-service/internal/models"
 
 	"github.com/google/uuid"
@@ -39,7 +38,7 @@ func (r *postgresRepo) GetByID(id string) (models.Product, error) {
 	var p models.Product
 	err := row.Scan(&p.ID, &p.Name, &p.Category, &p.Price, &p.Stock)
 	if err != nil {
-		return p, errors.New("product not found")
+		return p, err
 	}
 	return p, nil
 }
