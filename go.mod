@@ -1,20 +1,22 @@
-module Gym-Management-System
+module CLEANARCHITECTURE
 
 go 1.23.4
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/gin-gonic/gin v1.10.0
-	./inventory_service v0.0.0
-	./order_service v0.0.0
-	./user_service v0.0.0
+	github.com/trippingcoin/-CleanArchitecture/inventory_service v0.0.0
+	github.com/trippingcoin/-CleanArchitecture/order_service v0.0.0
+	github.com/trippingcoin/-CleanArchitecture/user_service v0.0.0
 	google.golang.org/grpc v1.71.1
 	google.golang.org/protobuf v1.36.6
 )
 
-replace ./user_service => ./user_service
-replace ./order_service => ./order_service
-replace ./inventory_service => ./inventory_service
+replace github.com/trippingcoin/-CleanArchitecture/user_service => ./user_service
+
+replace github.com/trippingcoin/-CleanArchitecture/order_service => ./order_service
+
+replace github.com/trippingcoin/-CleanArchitecture/inventory_service => ./inventory_service
 
 require (
 	github.com/bytedance/sonic v1.13.2 // indirect

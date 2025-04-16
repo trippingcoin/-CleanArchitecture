@@ -41,3 +41,22 @@ CREATE TABLE IF NOT EXISTS order_items (
 CREATE INDEX IF NOT EXISTS idx_order_user_id ON orders(user_id);
 CREATE INDEX IF NOT EXISTS idx_order_item_order_id ON order_items(order_id);
 CREATE INDEX IF NOT EXISTS idx_order_item_product_id ON order_items(product_id);
+
+ALTER TABLE orders
+ADD COLUMN updated_at TIMESTAMP DEFAULT NOW();
+
+ALTER TABLE orders
+ADD COLUMN created_at TIMESTAMP DEFAULT NOW();
+
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+   NEW.updated_at = NOW();
+   RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER set_updated_at
+BEFORE UPDATE ON orders
+FOR EACH ROW
+EXECUTE FUNCTION update_updated_at_column();

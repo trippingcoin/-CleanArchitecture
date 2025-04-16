@@ -1,9 +1,9 @@
 package router
 
 import (
-	"Gym-Management-System/internal/delivery/rest"
-	grpcclient "Gym-Management-System/internal/grpc"
-	"Gym-Management-System/internal/middleware"
+	"CLEANARCHITECTURE/internal/delivery/rest"
+	grpcclient "CLEANARCHITECTURE/internal/grpc"
+	"CLEANARCHITECTURE/internal/middleware"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"

@@ -1,11 +1,12 @@
 package rest
 
 import (
-	"/CleanArchitcture/user_service/proto/userpb"
 	"fmt"
 	"net/http"
 
-	"Gym-Management-System/internal/grpc"
+	"github.com/trippingcoin/-CleanArchitecture/user_service/proto/userpb"
+
+	"CLEANARCHITECTURE/internal/grpc"
 
 	"github.com/gin-gonic/gin"
 )

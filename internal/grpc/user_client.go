@@ -1,8 +1,7 @@
 package grpc
 
 import (
-	"/user_service/proto/userpb"
-
+	"github.com/trippingcoin/-CleanArchitecture/user_service/proto/userpb"
 	"google.golang.org/grpc"
 )
 

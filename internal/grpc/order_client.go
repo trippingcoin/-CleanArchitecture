@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"/order_service/proto/orderpb"
+	"github.com/trippingcoin/-CleanArchitecture/order_service/proto/orderpb"
 
 	"google.golang.org/grpc"
 )

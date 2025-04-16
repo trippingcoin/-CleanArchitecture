@@ -1,10 +1,11 @@
 package rest
 
 import (
-	"/order_service/proto/orderpb"
-	"Gym-Management-System/internal/grpc"
+	"CLEANARCHITECTURE/internal/grpc"
 	"log"
 	"net/http"
+
+	"github.com/trippingcoin/-CleanArchitecture/order_service/proto/orderpb"
 
 	"github.com/gin-gonic/gin"
 )

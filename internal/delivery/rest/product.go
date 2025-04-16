@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
-	"Gym-Management-System/internal/grpc"
+	"CLEANARCHITECTURE/internal/grpc"
 
-	"./inventory_service/proto/inventorypb"
 	"github.com/gin-gonic/gin"
+	"github.com/trippingcoin/-CleanArchitecture/inventory_service/proto/inventorypb"
 )
 
 type ProductHandler struct {

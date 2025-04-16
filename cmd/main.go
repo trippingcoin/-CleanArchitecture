@@ -4,7 +4,8 @@ import (
 	"log"
 	"os"
 
-	"Gym-Management-System/internal/router"
+	"CLEANARCHITECTURE/internal/router"
+
 	"google.golang.org/grpc"
 )
 

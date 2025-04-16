@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"./inventory_service/proto/inventorypb"
+	"github.com/trippingcoin/-CleanArchitecture/inventory_service/proto/inventorypb"
 	"google.golang.org/grpc"
 )
 
