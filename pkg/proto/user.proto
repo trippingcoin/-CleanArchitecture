@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package userpb;
+
+option go_package = "proto/userpb";
+
+service UserService {
+  rpc RegisterUser (UserRequest) returns (UserResponse);
+  rpc AuthenticateUser (AuthRequest) returns (AuthResponse);
+  rpc GetUserProfile (UserID) returns (UserProfile);
+}
+
+
+
+message UserRequest {
+  string name = 1;
+  string email = 2;
+  string password = 3;
+  string phone = 4;
+  string role = 5;
+}
+
+message UserResponse {
+  int32 user_id = 1;
+  string message = 2;
+}
+
+message AuthRequest {
+  string email = 1;
+  string password = 2;
+}
+
+message AuthResponse {
+  int32 user_id = 1;
+  string name = 2;
+  string email = 3;
+  string phone = 4;
+  string role = 5;
+}
+
+message UserID {
+  int32 user_id = 1;
+}
+
+message UserProfile {
+  int32 user_id = 1;
+  string name = 2;
+  string email = 3;
+  string phone = 4;
+  string role = 5;
+}
+

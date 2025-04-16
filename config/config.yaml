@@ -1,0 +1,10 @@
+server:
+  port: 8080
+
+services:
+  inventory: "http://localhost:8081"
+  order: "http://localhost:8082"
+  auth: "http://localhost:8083"
+
+jwt:
+  secret: "VerySecretPasswordToGuessIThinkHAHAHA"
