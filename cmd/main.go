@@ -31,7 +31,14 @@ func main() {
 	}
 	defer userConn.Close()
 
-	r := router.SetupRoutes(invConn, orderConn, userConn, "superSecret")
+	reviewConn, err := grpc.Dial("localhost:8084", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("failed to connect to Order gRPC: %v", err)
+		os.Exit(1)
+	}
+	defer reviewConn.Close()
+
+	r := router.SetupRoutes(invConn, orderConn, userConn, reviewConn, "superSecret")
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("failed to start HTTP server: %v", err)

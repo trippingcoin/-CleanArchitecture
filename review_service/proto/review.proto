@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+package reviewpb;
+
+service ReviewService {
+  rpc CreateReview (CreateReviewRequest) returns (ReviewResponse);
+  rpc UpdateReview (UpdateReviewRequest) returns (ReviewResponse);
+}
+
+option go_package = "/reviewpb;reviewpb";
+
+message CreateReviewRequest {
+  string product_id = 1;
+  string user_id = 2;
+  float rating = 3;
+  string comment = 4;
+}
+
+message UpdateReviewRequest {
+  string id = 1;
+  string product_id = 2;
+  string user_id = 3;
+  float rating = 4;
+  string comment = 5;
+}
+
+message ReviewResponse {
+  string id = 1;
+  string product_id = 2;
+  string user_id = 3;
+  float rating = 4;
+  string comment = 5;
+}

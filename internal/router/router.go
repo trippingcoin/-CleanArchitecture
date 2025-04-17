@@ -14,6 +14,7 @@ func SetupRoutes(
 	invConn *grpc.ClientConn,
 	orderConn *grpc.ClientConn,
 	userConn *grpc.ClientConn,
+	reviewConn *grpc.ClientConn,
 	jwtSecret string,
 ) *gin.Engine {
 	r := gin.Default()
@@ -22,15 +23,21 @@ func SetupRoutes(
 	invClient := grpcclient.NewInventoryGRPCClient(invConn)
 	orderClient := grpcclient.NewOrderGRPCClient(orderConn)
 	userClient := grpcclient.NewUserGRPCClient(userConn)
+	reviewClient := grpcclient.NewReviewGRPCClient(reviewConn)
 
 	// Instantiate REST handlers
 	invH := rest.NewProductHandler(invClient)
 	orderH := rest.NewOrderHandler(orderClient)
 	userH := rest.NewUserHandler(userClient)
+	reviewH := rest.NewReviewHandler(reviewClient)
 
 	// Public routes (no auth)
 	r.POST("/users/register", userH.RegisterUser)
 	r.POST("/users/authenticate", userH.AuthenticateUser)
+	r.POST("/reivews", reviewH.CreateReview)
+	r.GET("/reviews", reviewH.ListReviews)
+	r.GET("/reviews/:id", reviewH.GetReview)
+	r.PATCH("/reviews/:id", reviewH.UpdateReview)
 
 	// Protected routes
 	protected := r.Group("/")

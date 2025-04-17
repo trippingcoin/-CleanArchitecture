@@ -60,3 +60,13 @@ CREATE TRIGGER set_updated_at
 BEFORE UPDATE ON orders
 FOR EACH ROW
 EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TABLE reviews (
+    id SERIAL PRIMARY KEY,
+    product_id VARCHAR(255) NOT NULL,
+    user_id VARCHAR(255) NOT NULL,
+    rating FLOAT NOT NULL,
+    comment TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
