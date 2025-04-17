@@ -34,10 +34,6 @@ func SetupRoutes(
 	// Public routes (no auth)
 	r.POST("/users/register", userH.RegisterUser)
 	r.POST("/users/authenticate", userH.AuthenticateUser)
-	r.POST("/reivews", reviewH.CreateReview)
-	r.GET("/reviews", reviewH.ListReviews)
-	r.GET("/reviews/:id", reviewH.GetReview)
-	r.PATCH("/reviews/:id", reviewH.UpdateReview)
 
 	// Protected routes
 	protected := r.Group("/")
@@ -58,6 +54,11 @@ func SetupRoutes(
 
 	// User profile (protected)
 	protected.GET("/users/:id", userH.GetUserProfile)
+
+	protected.POST("/reivews", reviewH.CreateReview)
+	protected.GET("/reviews", reviewH.ListReviews)
+	protected.GET("/reviews/:id", reviewH.GetReview)
+	protected.PATCH("/reviews/:id", reviewH.UpdateReview)
 
 	return r
 }

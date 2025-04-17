@@ -7,6 +7,7 @@ require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/trippingcoin/-CleanArchitecture/inventory_service v0.0.0
 	github.com/trippingcoin/-CleanArchitecture/order_service v0.0.0
+	github.com/trippingcoin/-CleanArchitecture/review_service v0.1.0
 	github.com/trippingcoin/-CleanArchitecture/user_service v0.0.0
 	google.golang.org/grpc v1.71.1
 	google.golang.org/protobuf v1.36.6
@@ -17,6 +18,8 @@ replace github.com/trippingcoin/-CleanArchitecture/user_service => ./user_servic
 replace github.com/trippingcoin/-CleanArchitecture/order_service => ./order_service
 
 replace github.com/trippingcoin/-CleanArchitecture/inventory_service => ./inventory_service
+
+replace github.com/trippingcoin/-CleanArchitecture/review_service => ./review_service
 
 require (
 	github.com/bytedance/sonic v1.13.2 // indirect

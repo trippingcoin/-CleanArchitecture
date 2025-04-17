@@ -1,14 +1,14 @@
 package grpc
 
 import (
-	"github.com/trippingcoin/-CleanArchitecture/review_service/proto/orderpb"
+	"github.com/trippingcoin/-CleanArchitecture/review_service/proto/reviewpb"
 	"google.golang.org/grpc"
 )
 
 type ReviewGRPCClient interface {
-	reviewpb.OrderServiceClient
+	reviewpb.ReviewServiceClient
 }
 
-func NewOrderGRPCClient(conn *grpc.ClientConn) OrderGRPCClient {
-	return orderpb.NewOrderServiceClient(conn)
+func NewReviewGRPCClient(conn *grpc.ClientConn) ReviewGRPCClient {
+	return reviewpb.NewReviewServiceClient(conn)
 }
