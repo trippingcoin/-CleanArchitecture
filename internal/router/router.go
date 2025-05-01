@@ -9,7 +9,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-// Now takes three gRPC connections + JWT secret
 func SetupRoutes(
 	invConn *grpc.ClientConn,
 	orderConn *grpc.ClientConn,
