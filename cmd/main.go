@@ -33,12 +33,19 @@ func main() {
 
 	reviewConn, err := grpc.Dial("localhost:8084", grpc.WithInsecure())
 	if err != nil {
-		log.Fatalf("failed to connect to Order gRPC: %v", err)
+		log.Fatalf("failed to connect to Review gRPC: %v", err)
 		os.Exit(1)
 	}
 	defer reviewConn.Close()
 
-	r := router.SetupRoutes(invConn, orderConn, userConn, reviewConn, "superSecret")
+	statisticsConn, err := grpc.Dial("localhost:8085", grpc.WithInsecure())
+	if err != nil {
+		log.Fatalf("failed to connect to Statistics gRPC: %v", err)
+		os.Exit(1)
+	}
+	defer statisticsConn.Close()
+
+	r := router.SetupRoutes(invConn, orderConn, userConn, reviewConn, statisticsConn, "superSecret")
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatalf("failed to start HTTP server: %v", err)

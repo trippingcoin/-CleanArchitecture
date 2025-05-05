@@ -22,10 +22,13 @@ func (r *orderRepo) Create(order *domain.Order) error {
 	}
 	defer tx.Rollback()
 
-	// Insert order data (including total price)
-	query := `INSERT INTO orders (user_id, total_price, status) 
-	          VALUES ($1, $2, $3) RETURNING order_id`
-	err = tx.QueryRow(query, order.UserID, order.TotalPrice, order.Status).Scan(&order.ID)
+	// Set the CreatedAt and UpdatedAt timestamps
+	currentTime := time.Now()
+
+	// Insert order data (including total price and timestamps)
+	query := `INSERT INTO orders (user_id, total_price, status, created_at, updated_at) 
+	          VALUES ($1, $2, $3, $4, $5) RETURNING order_id`
+	err = tx.QueryRow(query, order.UserID, order.TotalPrice, order.Status, currentTime, currentTime).Scan(&order.ID)
 	if err != nil {
 		return err
 	}

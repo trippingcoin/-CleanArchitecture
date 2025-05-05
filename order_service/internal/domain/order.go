@@ -1,11 +1,15 @@
 package domain
 
+import "time"
+
 type Order struct {
-	ID         string
-	UserID     string
-	Items      []OrderItem
-	TotalPrice float64
-	Status     string
+	ID         string      `json:"order_id"`
+	UserID     string      `json:"user_id"`
+	TotalPrice float64     `json:"total_price"`
+	Status     string      `json:"status"`
+	Items      []OrderItem `json:"items"`
+	CreatedAt  time.Time   `json:"created_at"`
+	UpdatedAt  time.Time   `json:"updated_at"`
 }
 
 type OrderItem struct {

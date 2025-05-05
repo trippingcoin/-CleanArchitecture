@@ -70,3 +70,13 @@ CREATE TABLE reviews (
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE user_statistics (
+    user_id TEXT PRIMARY KEY,
+    total_orders INT DEFAULT 0,
+    total_spent NUMERIC(10, 2) DEFAULT 0,
+    peak_hour INT DEFAULT 0
+);
+
+ALTER TABLE user_statistics
+ADD COLUMN IF NOT EXISTS registration_date TIMESTAMP NOT NULL DEFAULT NOW();

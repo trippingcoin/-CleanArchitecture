@@ -4,6 +4,7 @@ import (
 	"CLEANARCHITECTURE/internal/delivery/rest"
 	grpcclient "CLEANARCHITECTURE/internal/grpc"
 	"CLEANARCHITECTURE/internal/middleware"
+	"log"
 
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
@@ -14,6 +15,7 @@ func SetupRoutes(
 	orderConn *grpc.ClientConn,
 	userConn *grpc.ClientConn,
 	reviewConn *grpc.ClientConn,
+	statisticsConn *grpc.ClientConn,
 	jwtSecret string,
 ) *gin.Engine {
 	r := gin.Default()
@@ -23,12 +25,14 @@ func SetupRoutes(
 	orderClient := grpcclient.NewOrderGRPCClient(orderConn)
 	userClient := grpcclient.NewUserGRPCClient(userConn)
 	reviewClient := grpcclient.NewReviewGRPCClient(reviewConn)
+	statisticsClient := grpcclient.NewStatisticsClient(statisticsConn)
 
 	// Instantiate REST handlers
 	invH := rest.NewProductHandler(invClient)
 	orderH := rest.NewOrderHandler(orderClient)
 	userH := rest.NewUserHandler(userClient)
 	reviewH := rest.NewReviewHandler(reviewClient)
+	statisticsH := rest.NewStatisticsHandler(statisticsClient)
 
 	// Public routes (no auth)
 	r.POST("/users/register", userH.RegisterUser)
@@ -51,13 +55,22 @@ func SetupRoutes(
 	protected.GET("/orders/:id", orderH.GetOrder)
 	protected.PATCH("/orders/:id", orderH.UpdateOrderStatus)
 
-	// User profile (protected)
+	// User profile
 	protected.GET("/users/:id", userH.GetUserProfile)
 
-	protected.POST("/reivews", reviewH.CreateReview)
+	// Statistics
+	protected.GET("/users/:id/statistics", statisticsH.GetUserStatistics)
+	protected.GET("/users/:id/order_statistics", statisticsH.GetUserOrdersStatistics)
+
+	// Reviews
+	protected.POST("/reviews", reviewH.CreateReview)
 	protected.GET("/reviews", reviewH.ListReviews)
 	protected.GET("/reviews/:id", reviewH.GetReview)
 	protected.PATCH("/reviews/:id", reviewH.UpdateReview)
+
+	for _, route := range r.Routes() {
+		log.Println(route.Method, route.Path)
+	}
 
 	return r
 }

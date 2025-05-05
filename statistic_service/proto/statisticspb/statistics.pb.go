@@ -175,8 +175,8 @@ type UserStatisticsResponse struct {
 	RegistrationDate  string                 `protobuf:"bytes,2,opt,name=registration_date,json=registrationDate,proto3" json:"registration_date,omitempty"`
 	TotalOrders       int32                  `protobuf:"varint,3,opt,name=total_orders,json=totalOrders,proto3" json:"total_orders,omitempty"`
 	AverageOrderValue float32                `protobuf:"fixed32,4,opt,name=average_order_value,json=averageOrderValue,proto3" json:"average_order_value,omitempty"`
-	TotalSpent        float32                `protobuf:"fixed32,5,opt,name=total_spent,json=totalSpent,proto3" json:"total_spent,omitempty"` // Added field for total spent by user
-	PeakHour          string                 `protobuf:"bytes,6,opt,name=peak_hour,json=peakHour,proto3" json:"peak_hour,omitempty"`         // Added field for user's peak hour
+	TotalSpent        float32                `protobuf:"fixed32,5,opt,name=total_spent,json=totalSpent,proto3" json:"total_spent,omitempty"`
+	PeakHour          string                 `protobuf:"bytes,6,opt,name=peak_hour,json=peakHour,proto3" json:"peak_hour,omitempty"`
 	unknownFields     protoimpl.UnknownFields
 	sizeCache         protoimpl.SizeCache
 }

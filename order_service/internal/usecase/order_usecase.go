@@ -2,16 +2,21 @@ package usecase
 
 import (
 	"context"
+	"encoding/json"
 	"order_service/internal/domain"
+
+	"github.com/nats-io/nats.go"
 )
 
 type OrderUsecase struct {
 	orderRepo domain.OrderRepository
+	natsConn  *nats.Conn
 }
 
-func NewOrderUsecase(orderRepo domain.OrderRepository) *OrderUsecase {
+func NewOrderUsecase(orderRepo domain.OrderRepository, natsConn *nats.Conn) *OrderUsecase {
 	return &OrderUsecase{
 		orderRepo: orderRepo,
+		natsConn:  natsConn,
 	}
 }
 
@@ -28,6 +33,23 @@ func (u *OrderUsecase) CreateOrder(ctx context.Context, userID string, items []d
 	err := u.orderRepo.Create(order)
 	if err != nil {
 		return "", err
+	}
+
+	event := map[string]interface{}{
+		"event":       "OrderCreated",
+		"order_id":    order.ID,
+		"user_id":     order.UserID,
+		"total_price": order.TotalPrice,
+		"created_at":  order.CreatedAt,
+	}
+
+	data, err := json.Marshal(event)
+	if err != nil {
+		return "error: ", err
+	}
+	err = u.natsConn.Publish("order.created", data)
+	if err != nil {
+		return "error: ", err
 	}
 
 	return order.ID, nil

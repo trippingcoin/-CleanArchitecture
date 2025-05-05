@@ -11,6 +11,7 @@ import (
 	"inventory_service/proto/inventorypb"
 
 	_ "github.com/lib/pq"
+	"github.com/nats-io/nats.go"
 	"google.golang.org/grpc"
 )
 
@@ -23,8 +24,14 @@ func main() {
 	}
 	defer db.Close()
 
+	nc, err := nats.Connect(nats.DefaultURL)
+	if err != nil {
+		log.Fatalf("Failed to connect to NATS: %v", err)
+	}
+	defer nc.Close()
+
 	repo := postgres.NewProductRepository(db) // Assume initialized with DB connection
-	uc := usecase.NewProductUsecase(repo)
+	uc := usecase.NewProductUsecase(repo, nc)
 	server := rpc.NewInventoryServer(uc)
 
 	lis, err := net.Listen("tcp", ":8081")

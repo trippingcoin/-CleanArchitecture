@@ -1,19 +1,41 @@
 package main
 
 import (
+	"database/sql"
 	"log"
-	"statistics_service/internal/app"
-	"statistics_service/internal/repository"
-	"statistics_service/internal/server"
+	"net"
+	ser "statistics_service/internal/delivery/grpc"
+	"statistics_service/internal/repository/postgres"
+	"statistics_service/internal/subscriber"
+	"statistics_service/internal/usecase"
+	pb "statistics_service/proto/statisticspb"
+
+	_ "github.com/lib/pq"
+	"google.golang.org/grpc"
 )
 
 func main() {
-	repo := repository.NewInMemoryStatisticsRepository()
-	statisticsApp := app.New(repo)
+	db, err := sql.Open("postgres", "postgres://postgres:redmi@localhost:5433/postgres?sslmode=disable")
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	defer db.Close()
 
-	s := server.NewServer(statisticsApp)
+	repo := postgres.NewPostgresRepo(db)
+	uc := usecase.NewStatisticsUsecase(repo)
 
-	if err := s.Start(":50051"); err != nil {
-		log.Fatalf("Error starting server: %v", err)
+	go subscriber.StartNATSSubscriber(uc)
+
+	lis, err := net.Listen("tcp", ":8085")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	grpcServer := grpc.NewServer()
+	pb.RegisterStatisticsServiceServer(grpcServer, ser.NewStatisticsHandler(uc))
+
+	log.Println("Statistics Service is running on :8085")
+	if err := grpcServer.Serve(lis); err != nil {
+		log.Fatal(err)
 	}
 }
