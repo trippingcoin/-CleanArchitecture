@@ -8,7 +8,6 @@ require (
 	github.com/trippingcoin/-CleanArchitecture/inventory_service v0.0.0
 	github.com/trippingcoin/-CleanArchitecture/order_service v0.0.0
 	github.com/trippingcoin/-CleanArchitecture/review_service v0.1.0
-	github.com/trippingcoin/-CleanArchitecture/statistic_service v0.0.0
 	github.com/trippingcoin/-CleanArchitecture/user_service v0.0.0
 	google.golang.org/grpc v1.72.0
 	google.golang.org/protobuf v1.36.6
