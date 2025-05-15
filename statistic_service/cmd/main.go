@@ -11,6 +11,7 @@ import (
 	pb "statistics_service/proto/statisticspb"
 
 	_ "github.com/lib/pq"
+	"github.com/nats-io/nats.go"
 	"google.golang.org/grpc"
 )
 
@@ -21,8 +22,15 @@ func main() {
 	}
 	defer db.Close()
 
+	nc, err := nats.Connect(nats.DefaultURL)
+	if err != nil {
+		log.Fatalf("Failed to connect to NATS: %v", err)
+	}
+	defer nc.Close()
+
 	repo := postgres.NewPostgresRepo(db)
-	uc := usecase.NewStatisticsUsecase(repo)
+	uc := usecase.NewStatisticsUsecase(repo, nc)
+	uc.PublishHourlyStats()
 
 	go subscriber.StartNATSSubscriber(uc)
 

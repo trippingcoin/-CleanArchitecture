@@ -121,3 +121,62 @@ func (r *orderRepo) ListByUser(userID string) ([]domain.Order, error) {
 
 	return orders, nil
 }
+
+func (r *orderRepo) GetOrderItems(orderID string) ([]domain.OrderItem, error) {
+	rows, err := r.db.Query("SELECT product_id, quantity FROM order_items WHERE order_id = $1", orderID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var items []domain.OrderItem
+	for rows.Next() {
+		var item domain.OrderItem
+		if err := rows.Scan(&item.ProductID, &item.Quantity); err != nil {
+			return nil, err
+		}
+		items = append(items, item)
+	}
+
+	return items, nil
+}
+
+func (r *orderRepo) GetAll() ([]domain.Order, error) {
+	rows, err := r.db.Query(`SELECT order_id, user_id, total_price, status, created_at, updated_at FROM orders`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var orders []domain.Order
+	for rows.Next() {
+		var order domain.Order
+		err := rows.Scan(&order.ID, &order.UserID, &order.TotalPrice, &order.Status, &order.CreatedAt, &order.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+
+		// Fetch order items for each order
+		itemsRows, err := r.db.Query(`SELECT product_id, quantity, price_per_item FROM order_items WHERE order_id = $1`, order.ID)
+		if err != nil {
+			return nil, err
+		}
+
+		var items []domain.OrderItem
+		for itemsRows.Next() {
+			var item domain.OrderItem
+			err := itemsRows.Scan(&item.ProductID, &item.Quantity, &item.PricePerItem)
+			if err != nil {
+				itemsRows.Close()
+				return nil, err
+			}
+			items = append(items, item)
+		}
+		itemsRows.Close()
+
+		order.Items = items
+		orders = append(orders, order)
+	}
+
+	return orders, nil
+}

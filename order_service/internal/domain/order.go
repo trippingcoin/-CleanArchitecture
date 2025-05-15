@@ -19,15 +19,15 @@ type OrderItem struct {
 }
 
 type OrderRepository interface {
-	// Create an order in the repository.
 	Create(order *Order) error
 
-	// GetByID retrieves an order by its ID.
 	GetByID(id string) (*Order, error)
 
-	// UpdateStatus updates the status of an order.
 	UpdateStatus(id string, status string) error
 
-	// ListByUser retrieves a list of orders for a specific user.
 	ListByUser(userID string) ([]Order, error)
+
+	GetAll() ([]Order, error)
+
+	GetOrderItems(orders string) ([]OrderItem, error)
 }

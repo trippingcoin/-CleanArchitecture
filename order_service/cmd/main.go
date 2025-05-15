@@ -1,13 +1,17 @@
 package main
 
 import (
+	"context"
 	"database/sql"
+	"fmt"
 	"log"
 	"net"
+	"time"
 
+	"order_service/internal/cache"
 	rpc "order_service/internal/delivery/grpc"
 	"order_service/internal/repository/postgres"
-	"order_service/internal/usecase"
+	u "order_service/internal/usecase"
 	"order_service/proto/orderpb"
 
 	_ "github.com/lib/pq"
@@ -35,9 +39,48 @@ func main() {
 
 	// Initialize the repository and usecase
 	repo := postgres.NewOrderRepository(db)
-	uc := usecase.NewOrderUsecase(repo, nc)
+	uc := u.NewOrderUsecase(repo, nc)
 
-	// Set up the gRPC server
+	cache.InitCache()
+	uc.InitCache()
+
+	ctx := context.Background()
+	orders, err := uc.ListOrders(ctx, "1")
+	if err != nil {
+		log.Printf("Failed to preload orders into cache: %v", err)
+	} else {
+		cache.OrderCache.Set("order_list", orders, cache.DefaultExpiration)
+		for _, o := range orders {
+			cache.OrderCache.Set(
+				fmt.Sprintf("order_%s", o.ID),
+				o,
+				cache.DefaultExpiration,
+			)
+		}
+		log.Println("Cache preloaded with order data")
+	}
+
+	go func() {
+		ticker := time.NewTicker(12 * time.Hour)
+		for range ticker.C {
+			log.Println("Refreshing order cache...")
+			orders, err := uc.ListOrders(context.Background(), "")
+			if err != nil {
+				log.Printf("Cache refresh failed: %v", err)
+				continue
+			}
+			cache.OrderCache.Set("order_list", orders, cache.DefaultExpiration)
+			for _, o := range orders {
+				cache.OrderCache.Set(
+					fmt.Sprintf("order_%s", o.ID),
+					o,
+					cache.DefaultExpiration,
+				)
+			}
+			log.Println("Order cache successfully refreshed")
+		}
+	}()
+
 	srv := rpc.NewOrderServiceServer(uc)
 
 	lis, err := net.Listen("tcp", ":8082")
@@ -50,7 +93,6 @@ func main() {
 
 	log.Println("Order Service gRPC server started on port 8082")
 
-	// Serve the gRPC server
 	if err := grpcServer.Serve(lis); err != nil {
 		log.Fatalf("failed to serve: %v", err)
 	}

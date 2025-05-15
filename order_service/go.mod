@@ -5,6 +5,7 @@ go 1.23.4
 require (
 	github.com/lib/pq v1.10.9
 	github.com/nats-io/nats.go v1.42.0
+	github.com/patrickmn/go-cache v2.1.0+incompatible
 	google.golang.org/grpc v1.71.1
 	google.golang.org/protobuf v1.36.4
 )

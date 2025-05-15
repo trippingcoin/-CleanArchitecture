@@ -3,16 +3,16 @@ package grpc
 import (
 	"context"
 	"order_service/internal/domain"
-	"order_service/internal/usecase"
+	u "order_service/internal/usecase"
 	"order_service/proto/orderpb"
 )
 
 type OrderServiceServer struct {
 	orderpb.UnimplementedOrderServiceServer
-	UC *usecase.OrderUsecase
+	UC *u.OrderUsecase
 }
 
-func NewOrderServiceServer(uc *usecase.OrderUsecase) *OrderServiceServer {
+func NewOrderServiceServer(uc *u.OrderUsecase) *OrderServiceServer {
 	return &OrderServiceServer{UC: uc}
 }
 
